@@ -1,42 +1,73 @@
-cube = function ()
+cube = function (dimension)
 {
-    this.r = 50;
+    this.r = dimension;
 
-    this.face1 = new face();
-    this.face2 = new face();
-    this.face3 = new face();
-    this.face4 = new face();
-    this.face5 = new face();
-    this.face6 = new face();
+    var array_corner = [];
 
-    this.face1.r = this.r;
+    var corner_RDF = new corner(this.r, ["right", "down", "front"]);
+    var corner_RDB = new corner(this.r, ["right", "down", "back"]);
+    var corner_RUF = new corner(this.r, ["right", "up", "front"]);
+    var corner_RUB = new corner(this.r, ["right", "up", "back"]);
+    var corner_LDF = new corner(this.r, ["left", "down", "front"]);
+    var corner_LDB = new corner(this.r, ["left", "down", "back"]);
+    var corner_LUF = new corner(this.r, ["left", "up", "front"]);
+    var corner_LUB = new corner(this.r, ["left", "up", "back"]);
 
-    this.setColor = function (color1, color2, color3, color4, color5, color6)
-    {
-        this.face1.color = color1;
-        this.face2.color = color2;
-        this.face3.color = color3;
-        this.face4.color = color4;
-        this.face5.color = color5;
-        this.face6.color = color6;
+    corners = {
+        corner_RDF,
+        corner_RDB,
+        corner_RUF,
+        corner_RUB,
+        corner_LDF,
+        corner_LDB,
+        corner_LUF,
+        corner_LUB
     }
 
-    //this.face1.color = red;
+    array_corner.push(corner_RDF, corner_RDB, corner_RUF, corner_RUB, corner_LDF, corner_LDB, corner_LUF, corner_LUB);
 
-    this.display = function()
+    this.display = function(faceToRotate, angle){
+        for(i=0; i<8; i++)
+        {
+        if(array_corner[i].pos[0] == faceToRotate || array_corner[i].pos[1] == faceToRotate || array_corner[i].pos[2] == faceToRotate)
+            {
+                push();
+                if(faceToRotate == "right")
+                {
+                    rotateX(angle);
+                }
+                if(faceToRotate == "left")
+                {
+                    rotateX(-angle);
+                }
+                if(faceToRotate == "down")
+                {
+                    rotateY(angle);
+                }
+                if(faceToRotate == "up")
+                {
+                    rotateY(-angle);
+                }
+                if(faceToRotate == "front")
+                {
+                    rotateZ(angle);
+                }
+                if(faceToRotate == "back")
+                {
+                    rotateZ(-angle);
+                }
+                array_corner[i].display();
+                pop();
+            }
+            else
+            {
+                array_corner[i].display();
+            }
+        }
+    }
+
+    this.executeRotation = function(faceToRotate, clockwise)
     {
-        push();
-        translate(0, 0, this.r / 2);
-        this.face1.display();
-        pop();
-        push()
-        translate(0, 0, -1 * this.r / 2);
-        this.face2.display();
-        pop();
-        push();
-        rotateX(PI/2);
-        translate(0, 0, this.r / 2);
-        this.face3.display();
-        pop();
+
     }
 }

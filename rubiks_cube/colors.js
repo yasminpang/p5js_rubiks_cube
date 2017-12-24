@@ -1,7 +1,8 @@
-redColor = {red : 255, green : 0, blue : 0};
-whiteColor = {red : 255, green : 255, blue : 255};
-greenColor = {red : 0, green : 255, blue : 0};
-blueColor = {red : 0, green : 0, blue : 255};
-orangeColor = {red : 255, green : 165, blue : 0};
-yellowColor = {red : 255, green : 255, blue : 0};
-blackColor = {red : 0, green : 0, blue : 0};
+rightColor = {red : 255, green : 0, blue : 0}; //Red
+upColor = {red : 255, green : 255, blue : 255}; //White
+frontColor = {red : 0, green : 255, blue : 0}; //Green
+backColor = {red : 0, green : 0, blue : 255}; //Blue
+leftColor = {red : 255, green : 165, blue : 0}; //Orange
+downColor = {red : 255, green : 255, blue : 0}; //Yellow
+//blackColor = {red : 0, green : 0, blue : 0};
+
