@@ -34,12 +34,14 @@ face = function(dimension, pos, color)
             rotateY(PI);
         }
 
+        fill(25, 25, 25);
+        box(this.r - 1, this.r - 1, this.r - 1);
+
         fill(this.color.red, this.color.green, this.color.blue);
         translate(0, 0, this.r / 2)
-        plane(this.r, this.r);
-        fill(10, 10, 10);
-        translate(0, 0, -this.r);
-        plane(this.r, this.r);
+        plane(this.r - 3, this.r - 3);
+        //translate(0, 0, -this.r);
+        //plane(this.r, this.r);
         pop();
     }
 }

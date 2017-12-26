@@ -13,6 +13,7 @@ cube_angle = 0;
 function setup() {
   // put setup code here
   createCanvas(600, 400, WEBGL);
+  //ortho(-width / 3, width / 3, -height / 2.8, height / 2.8, 0, 500);
   myCube = new cube(45);
 }
 
@@ -20,10 +21,10 @@ function draw() {
   // put drawing code here
   background(210);
   noStroke();
-  camera(120, -120, 150, 0, 0, 0, 0, 1, 0);
+  camera(140, -140, 140, 0, 0, 0, 0, 1, 0);
 
-  //rotateY(Y_angle);
-  //rotateZ(Z_angle);
+  //rotateY(frameCount * 0.01);
+  //rotateX(frameCount * 0.01);
 
   if (faceToRotate != "" )
   {
