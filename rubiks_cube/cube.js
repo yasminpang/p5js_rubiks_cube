@@ -70,4 +70,9 @@ cube = function (dimension)
     {
 
     }
+
+    this.move = function(direction)
+    {
+        
+    }
 }
