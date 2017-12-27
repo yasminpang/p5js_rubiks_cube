@@ -1,7 +1,7 @@
 center = function(dimension, pos)
 {
-    var color;
-    this.pos = pos;
+    this.color = {};
+    //this.pos = pos;
     var translateX = 0;
     var translateY = 0;
     var translateZ = 0;
@@ -9,37 +9,37 @@ center = function(dimension, pos)
     switch(pos) {
         case "right":
             translateX = dimension;
-            color = rightColor;
+            this.color = rightColor;
             break;
         case "left":
             translateX = -dimension;
-            color = leftColor;
+            this.color = leftColor;
             break;
         case "up":
             translateY = -dimension;
-            color = upColor;
+            this.color = upColor;
             break;
         case "down":
             translateY = dimension;
-            color = downColor;
+            this.color = downColor;
             break;
         case "front":
             translateZ = dimension;
-            color = frontColor;
+            this.color = frontColor;
             break;
         case "back":
             translateZ = -dimension;
-            color = backColor;
+            this.color = backColor;
             break;
     }
 
-    this.face = new face(dimension, pos, color);
+    this.face = new face(dimension, pos);
 
     this.display = function()
     {
         push();
         translate(translateX, translateY, translateZ);
-        this.face.display();
+        this.face.display(this.color);
         pop();
     }
 }

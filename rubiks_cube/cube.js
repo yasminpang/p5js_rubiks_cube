@@ -159,40 +159,15 @@ cube = function (dimension)
                 display_face(vertical_middle_RL);
                 break;
             default :
-                center_B.display();
-                center_R.display();
-                center_D.display();
-                center_L.display();
-                center_U.display();
-                center_F.display();
-
-                side_RU.display();
-                side_RB.display();
-                side_RD.display();
-                side_RF.display();
-                side_LU.display();
-                side_LF.display();
-                side_LD.display();
-                side_LB.display();
-                side_DF.display();
-                side_DB.display();
-                side_UF.display();
-                side_UB.display();
-                        
-                corner_RDB.display();
-                corner_RDF.display();
-                corner_RUB.display();
-                corner_RUF.display();
-                corner_LDB.display();
-                corner_LDF.display();
-                corner_LUB.display();
-                corner_LUF.display();
+                display_face(right_face);
+                display_face(left_face);
+                display_face(vertical_middle_FB);
         }
     }
 
     this.executeRotation = function(faceToRotate, clockwise)
     {
-
+        console.log(faceToRotate + " | " + clockwise);
     }
 
     this.move = function(direction)

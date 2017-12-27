@@ -1,102 +1,137 @@
 side = function(dimension, pos)
 {
-    this.pos = pos;
+    //this.pos = pos;
 
     var translateX = 0;
     var translateY = 0;
     var translateZ = 0;
+
+    this.face = {};
     
     if(pos[0] === "right")
     {
         translateX = dimension;
-        this.color1 = rightColor;
+        this.face.right = {};
+        this.face.right.position = new face(dimension, "right");
+        this.face.right.color = rightColor;
         switch (pos[1])
         {
             case "down":
                 translateY = dimension;
-                this.color2 = downColor;
+                this.face.down = {};
+                this.face.down.position = new face(dimension, "down");
+                this.face.down.color = downColor;
                 break;
             case "up":
                 translateY = -dimension;
-                this.color2 = upColor;
+                this.face.up = {};
+                this.face.up.position = new face(dimension, "up");
+                this.face.up.color = upColor;
                 break;
             case "front":
                 translateZ = dimension;
-                this.color2 = frontColor;
+                this.face.front = {};
+                this.face.front.position = new face(dimension, "front");
+                this.face.front.color = frontColor;
                 break;
             case "back":
                 translateZ = -dimension;
-                this.color2 = backColor;
+                this.face.back = {};
+                this.face.back.position = new face(dimension, "back");
+                this.face.back.color = backColor;
                 break;
         }
     }
     else if(pos[0] === "left")
     {
         translateX = -dimension;
-        this.color1 = leftColor;
+        this.face.left = {};
+        this.face.left.position = new face(dimension, "left");
+        this.face.left.color = leftColor;
         switch (pos[1])
         {
             case "down":
                 translateY = dimension;
-                this.color2 = downColor;
+                this.face.down = {};
+                this.face.down.position = new face(dimension, "down");
+                this.face.down.color = downColor;
                 break;
             case "up":
                 translateY = -dimension;
-                this.color2 = upColor;
+                this.face.up = {};
+                this.face.up.position = new face(dimension, "up");
+                this.face.up.color = upColor;
                 break;
             case "front":
                 translateZ = dimension;
-                this.color2 = frontColor;
+                this.face.front = {};
+                this.face.front.position = new face(dimension, "front");
+                this.face.front.color = frontColor;
                 break;
             case "back":
                 translateZ = -dimension;
-                this.color2 = backColor;
+                this.face.back = {};
+                this.face.back.position = new face(dimension, "back");
+                this.face.back.color = backColor;
                 break;
         }
     }
     else if(pos[0] === "down")
     {
         translateY = dimension;
-        this.color1 = downColor;
+        this.face.down = {};
+        this.face.down.position = new face(dimension, "down");
+        this.face.down.color = downColor;
         switch (pos[1])
         {
             case "front":
                 translateZ = dimension;
-                this.color2 = frontColor;
+                this.face.front = {};
+                this.face.front.position = new face(dimension, "front");
+                this.face.front.color = frontColor;
                 break;
             case "back":
                 translateZ = -dimension;
-                this.color2 = backColor;
+                this.face.back = {};
+                this.face.back.position = new face(dimension, "back");
+                this.face.back.color = backColor;
                 break;
         } 
     }
     else if(pos[0] === "up")
     {
         translateY = -dimension;
-        this.color1 = upColor;
+        this.face.up = {};
+        this.face.up.position = new face(dimension, "up");
+        this.face.up.color = upColor;
         switch (pos[1])
         {
             case "front":
                 translateZ = dimension;
-                this.color2 = frontColor;
-                break;
+                this.face.front = {};
+                this.face.front.position = new face(dimension, "front");
+                this.face.front.color = frontColor;
+                        break;
             case "back":
                 translateZ = -dimension;
-                this.color2 = backColor;
+                this.face.back = {};
+                this.face.back.position = new face(dimension, "back");
+                this.face.back.color = backColor;
                 break;
         } 
     }
-    
-
-    this.face1 = new face(dimension, pos[0], this.color1);
-    this.face2 = new face(dimension, pos[1], this.color2);
 
     this.display = function()
     {
         push();
         translate(translateX, translateY, translateZ);
-        this.face1.display();
-        this.face2.display();
+        for (var key in this.face) {
+            // skip loop if the property is from prototype
+            if (!this.face.hasOwnProperty(key)) continue;
+        
+            var obj = this.face[key];
+            obj.position.display(obj.color);
+        }
         pop();
     }
 }

@@ -28,7 +28,7 @@ function draw() {
 
   if (faceToRotate != "" )
   {
-    angle += PI / 50;
+    angle += PI / 38;
     if(angle > PI/2)
     {
       myCube.executeRotation(faceToRotate, direction)
@@ -39,7 +39,7 @@ function draw() {
   }
 
   if(move_cube != ""){
-    cube_angle += PI/50;
+    cube_angle += PI/38;
     if(cube_angle > PI/2 )
     {
       myCube.move(move_cube);

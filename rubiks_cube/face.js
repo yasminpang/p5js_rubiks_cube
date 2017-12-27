@@ -1,16 +1,16 @@
-face = function(dimension, pos, color)
+face = function(dimension, pos)
 {
     //position can be 
     //right, left, up, down, front, back 
     this.pos = pos;
     
     //rightColor, leftColor, upColor, downColor, frontColor, backColor
-    this.color = color;
+    //this.color = color;
 
     //dimension of the face.
     this.r = dimension;
 
-    this.display = function()
+    this.display = function(color)
     {
         push();
         if(pos == "right")
@@ -37,11 +37,9 @@ face = function(dimension, pos, color)
         fill(25, 25, 25);
         box(this.r - 1, this.r - 1, this.r - 1);
 
-        fill(this.color.red, this.color.green, this.color.blue);
+        fill(color.red, color.green, color.blue);
         translate(0, 0, this.r / 2)
         plane(this.r - 3, this.r - 3);
-        //translate(0, 0, -this.r);
-        //plane(this.r, this.r);
         pop();
     }
 }
