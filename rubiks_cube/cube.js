@@ -165,9 +165,22 @@ cube = function (dimension)
         }
     }
 
-    this.executeRotation = function(faceToRotate, clockwise)
+    this.executeRotation = function(faceToRotate, direction)
     {
-        console.log(faceToRotate + " | " + clockwise);
+        //console.log(faceToRotate + " | " + clockwise);
+        var temp;
+        switch (faceToRotate)
+        {
+            case "right":
+                if (direction === 1)
+                {
+                    temp = corner_RUB.face.up.color;
+                    corner_RUB.face.up.color = corner_RUF.face.front.color;
+                    corner_RUF.face.front.color = corner_RDF.face.down.color;
+                    corner_RDF.face.down.color = corner_RDB.face.back.color;
+                    corner_RDB.face.back.color = temp;
+                }
+        }
     }
 
     this.move = function(direction)
