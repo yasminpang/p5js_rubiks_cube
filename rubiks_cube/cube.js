@@ -190,7 +190,7 @@ cube = function (dimension)
     this.executeRotation = function(faceToRotate, direction)
     {
         //console.log(faceToRotate + " | " + clockwise);
-        var temp;
+        //var temp;
         switch (faceToRotate)
         {
             case "right":
@@ -202,12 +202,91 @@ cube = function (dimension)
                 //rotate sides color
                 swap_color([side_RU.face.up, side_RF.face.front, side_RD.face.down, side_RB.face.back], direction);
                 swap_color([side_RU.face.right, side_RF.face.right, side_RD.face.right, side_RB.face.right], direction);
-                
+                break;
+            case "left":
+                //Rotate corners color
+                swap_color([corner_LDF.face.front, corner_LUF.face.up, corner_LUB.face.back, corner_LDB.face.down], direction);
+                swap_color([corner_LDF.face.down, corner_LUF.face.front, corner_LUB.face.up, corner_LDB.face.back], direction);
+                swap_color([corner_LDF.face.left, corner_LUF.face.left, corner_LUB.face.left, corner_LDB.face.left], direction);
+
+                //rotate sides color
+                swap_color([side_LU.face.up, side_LB.face.back, side_LD.face.down, side_LF.face.front], direction);
+                swap_color([side_LU.face.left, side_LB.face.left, side_LD.face.left, side_LF.face.left], direction);
+                break;
+            case "up":
+                //corners
+                swap_color([corner_LUF.face.front, corner_RUF.face.right, corner_RUB.face.back, corner_LUB.face.left], direction);
+                swap_color([corner_LUF.face.left, corner_RUF.face.front, corner_RUB.face.right, corner_LUB.face.back], direction);
+                swap_color([corner_LUF.face.up, corner_RUF.face.up, corner_RUB.face.up, corner_LUB.face.up], direction);
+                //sides
+                swap_color([side_UF.face.front, side_RU.face.right, side_UB.face.back, side_LU.face.left], direction);
+                swap_color([side_UF.face.up, side_RU.face.up, side_UB.face.up, side_LU.face.up], direction);
+                break;
+            case "down":
+                //corners
+                swap_color([corner_RDF.face.front, corner_LDF.face.left, corner_LDB.face.back, corner_RDB.face.right], direction);
+                swap_color([corner_RDF.face.right, corner_LDF.face.front, corner_LDB.face.left, corner_RDB.face.back], direction);
+                swap_color([corner_RDF.face.down, corner_LDF.face.down, corner_LDB.face.down, corner_RDB.face.down], direction);
+                //sides
+                swap_color([side_DF.face.front, side_LD.face.left, side_DB.face.back, side_RD.face.right], direction);
+                swap_color([side_DF.face.down, side_LD.face.down, side_DB.face.down, side_RD.face.down], direction);
+                break;
+            case "front":
+                //corners
+                swap_color([corner_RUF.face.up, corner_LUF.face.left, corner_LDF.face.down, corner_RDF.face.right], direction);
+                swap_color([corner_RUF.face.right, corner_LUF.face.up, corner_LDF.face.left, corner_RDF.face.down], direction);
+                swap_color([corner_RUF.face.front, corner_LUF.face.front, corner_LDF.face.front, corner_RDF.face.front], direction);
+                //sides
+                swap_color([side_RF.face.right, side_UF.face.up, side_LF.face.left, side_DF.face.down], direction);
+                swap_color([side_RF.face.front, side_UF.face.front, side_LF.face.front, side_DF.face.front], direction);
+                break;
+            case "back":
+                //corners
+                swap_color([corner_RUB.face.right, corner_RDB.face.down, corner_LDB.face.left, corner_LUB.face.up], direction);
+                swap_color([corner_RUB.face.up, corner_RDB.face.right, corner_LDB.face.down, corner_LUB.face.left], direction);
+                swap_color([corner_RUB.face.back, corner_RDB.face.back, corner_LDB.face.back, corner_LUB.face.back], direction);
+                //sides
+                swap_color([side_UB.face.up, side_RB.face.right, side_DB.face.down, side_LB.face.left], direction);
+                swap_color([side_UB.face.back, side_RB.face.back, side_DB.face.back, side_LB.face.back], direction);
+                break;
+            case "v_middle_FB":
+                swap_color([center_U, center_F, center_D, center_B], direction);
+                swap_color([side_UF.face.up, side_DF.face.front, side_DB.face.down, side_UB.face.back], direction);
+                swap_color([side_UF.face.front, side_DF.face.down, side_DB.face.back, side_UB.face.up], direction);
+                break;
+            case "h_middle_RL":
+                swap_color([center_F, center_R, center_B, center_L], direction);
+                swap_color([side_RF.face.right, side_RB.face.back, side_LB.face.left, side_LF.face.front], direction);
+                swap_color([side_RF.face.front, side_RB.face.right, side_LB.face.back, side_LF.face.left], direction);
+                break;
         }
     }
 
     this.move = function(direction)
     {
-
+        console.log(direction);
+        switch (direction)
+        {
+            case "up":
+                this.executeRotation("right", 1);
+                this.executeRotation("left", -1);
+                this.executeRotation("v_middle_FB", 1);
+                break;
+            case "down":
+                this.executeRotation("right", -1);
+                this.executeRotation("left", 1);
+                this.executeRotation("v_middle_FB", -1);
+                break;
+            case "right":
+                this.executeRotation("up", -1);
+                this.executeRotation("down", 1);
+                this.executeRotation("h_middle_RL", -1);
+                break;            
+            case "left":
+                this.executeRotation("up", 1);
+                this.executeRotation("down", -1);
+                this.executeRotation("h_middle_RL", 1);
+                break;            
+        }
     }
 }
