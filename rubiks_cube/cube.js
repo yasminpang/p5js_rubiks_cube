@@ -165,6 +165,28 @@ cube = function (dimension)
         }
     }
 
+    function swap_color(array_to_swap, direction)
+    {
+        var temp;
+        if(direction === 1)
+        {
+            temp = array_to_swap[0].color;
+            for(i=0; i<3; i++){
+                array_to_swap[i].color = array_to_swap[i+1].color;
+            }
+            array_to_swap[3].color = temp;
+        }
+        else
+        {
+            temp = array_to_swap[3].color;
+            for(i=3; i>0; i--){
+                array_to_swap[i].color = array_to_swap[i-1].color;
+            }
+            array_to_swap[0].color = temp;
+
+        }
+    }
+    
     this.executeRotation = function(faceToRotate, direction)
     {
         //console.log(faceToRotate + " | " + clockwise);
@@ -172,14 +194,15 @@ cube = function (dimension)
         switch (faceToRotate)
         {
             case "right":
-                if (direction === 1)
-                {
-                    temp = corner_RUB.face.up.color;
-                    corner_RUB.face.up.color = corner_RUF.face.front.color;
-                    corner_RUF.face.front.color = corner_RDF.face.down.color;
-                    corner_RDF.face.down.color = corner_RDB.face.back.color;
-                    corner_RDB.face.back.color = temp;
-                }
+                //Rotate corners color
+                swap_color([corner_RUB.face.up, corner_RUF.face.front, corner_RDF.face.down, corner_RDB.face.back], direction);
+                swap_color([corner_RUB.face.back, corner_RUF.face.up, corner_RDF.face.front, corner_RDB.face.down], direction);
+                swap_color([corner_RUB.face.right, corner_RUF.face.right, corner_RDF.face.right, corner_RDB.face.right], direction);
+
+                //rotate sides color
+                swap_color([side_RU.face.up, side_RF.face.front, side_RD.face.down, side_RB.face.back], direction);
+                swap_color([side_RU.face.right, side_RF.face.right, side_RD.face.right, side_RB.face.right], direction);
+                
         }
     }
 
