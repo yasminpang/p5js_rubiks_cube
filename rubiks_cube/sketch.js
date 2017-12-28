@@ -14,17 +14,17 @@ function setup() {
   // put setup code here
   createCanvas(600, 400, WEBGL);
   //ortho(-width / 3, width / 3, -height / 2.8, height / 2.8, 0, 500);
-  myCube = new cube(45);
+  myCube = new cube(60);
 }
 
 function draw() {
   // put drawing code here
   background(210);
   noStroke();
-  camera(140, -140, 140, 0, 0, 0, 0, 1, 0);
+  //camera(140, -140, 140, 0, 0, 0, 0, 1, 0);
 
-  //rotateY(frameCount * 0.01);
-  //rotateX(frameCount * 0.01);
+  rotateX(-PI/6);
+  rotateY(-PI/7);
 
   if (faceToRotate != "" )
   {
