@@ -35,7 +35,7 @@ face = function(dimension, pos)
         }
 
         fill(25, 25, 25);
-        box(this.r - 1, this.r - 1, this.r - 1);
+        box(this.r - 2, this.r - 2, this.r - 2);
 
         fill(color.red, color.green, color.blue);
         translate(0, 0, this.r / 2)
