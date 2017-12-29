@@ -101,7 +101,7 @@ cube = function (dimension)
         
         for (i=0; i<8; i++)
         {
-
+            if(corners[])
         }
 
         switch(faceToRotate)
