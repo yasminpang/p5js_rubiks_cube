@@ -34,8 +34,8 @@ face = function(dimension, pos)
             rotateY(PI);
         }
 
-        fill(25, 25, 25);
-        box(this.r - 1, this.r - 1, this.r - 1);
+        //fill(25, 25, 25);
+        //box(this.r - 1, this.r - 1, this.r - 1);
 
         fill(color.red, color.green, color.blue);
         translate(0, 0, this.r / 2)

@@ -19,7 +19,7 @@ function setup() {
 
 function draw() {
   // put drawing code here
-  background(210);
+  background(120);
   noStroke();
   //camera(140, -140, 140, 0, 0, 0, 0, 1, 0);
 
@@ -28,7 +28,7 @@ function draw() {
 
   if (faceToRotate != "" )
   {
-    angle += PI / 38;
+    angle += 0.18;
     if(angle > PI/2)
     {
       myCube.executeRotation(faceToRotate, direction)
@@ -39,7 +39,7 @@ function draw() {
   }
 
   if(move_cube != ""){
-    cube_angle += PI/38;
+    cube_angle += 0.18;
     if(cube_angle > PI/2 )
     {
       myCube.move(move_cube);
