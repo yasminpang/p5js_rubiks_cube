@@ -1,53 +1,54 @@
 corner = function(dimension, pos)
 {
-    this.face = {};
-    //this.color = {};
-    var translateX = 0;
-    var translateY = 0;
-    var translateZ = 0;
+    this.position = {
+        right : false,
+        left : false,
+        up : false,
+        down : false,
+        front : false,
+        back : false
+    };
 
-    if(pos[0] === "right")
-    {
-        translateX = dimension;
-        this.face.right = {};
-        this.face.right.position = new face(dimension, "right");
-        this.face.right.color = rightColor;
+    this.color = {        
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    };
+
+    this.face = {
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    };
+
+    this.translate = {
+        right : 0,
+        left : 0,
+        up : 0,
+        down : 0,
+        front : 0,
+        back : 0
     }
-    else if(pos[0] === "left")
-    {
-        translateX = -dimension;
-        this.face.left = {};
-        this.face.left.position = new face(dimension, "left");
-        this.face.left.color = leftColor;
+
+    var arrayLength = pos.length;
+    for (var i = 0; i < arrayLength; i++) {
+        //alert(myStringArray[i]);
+        this.position[pos[i]] = true;
+        this.face[pos[i]] = new face(dimension, pos[i]);
+        this.color[pos[i]] = pos[i];
+        this.translate[pos[i]] = dimension;
     }
-    if(pos[1] === "down")
-    {
-        translateY = dimension;
-        this.face.down = {};
-        this.face.down.position = new face(dimension, "down");
-        this.face.down.color = downColor;
-    }
-    else if(pos[1] === "up")
-    {
-        translateY = -dimension;
-        this.face.up = {};
-        this.face.up.position = new face(dimension, "up");
-        this.face.up.color = upColor;
-    }
-    if(pos[2] === "front")
-    {
-        translateZ = dimension;
-        this.face.front = {};
-        this.face.front.position = new face(dimension, "front");
-        this.face.front.color = frontColor;
-    }
-    else if(pos[2] === "back")
-    {
-        translateZ = -dimension;
-        this.face.back = {};
-        this.face.back.position = new face(dimension, "back");
-        this.face.back.color = backColor;
-    }
+    
+    var translateX = this.translate.right - this.translate.left;
+    var translateY = this.translate.down - this.translate.up;
+    var translateZ = this.translate.front - this.translate.back;
+
 
     this.display = function()
     {
@@ -57,8 +58,10 @@ corner = function(dimension, pos)
             // skip loop if the property is from prototype
             if (!this.face.hasOwnProperty(key)) continue;
         
-            var obj = this.face[key];
-            obj.position.display(obj.color);
+            if(this.face[key]){
+                var obj = this.face[key];
+                obj.display(colors[this.color[key]]);
+            }
         }
         pop();
     }
