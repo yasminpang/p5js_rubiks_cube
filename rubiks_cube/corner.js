@@ -62,14 +62,4 @@ corner = function(dimension, pos)
         }
         pop();
     }
-
-    this.setColor = function(face, color)
-    {
-        face.setColor(color);
-    }
-
-    this.getColor = function(face)
-    {
-        return face.getColor();
-    }
 }

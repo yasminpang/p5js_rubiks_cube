@@ -1,113 +1,109 @@
 cube = function (dimension)
 {
-    this.r = dimension;
+    //this.r = dimension;
 
-    var up_face = [];
-    var down_face = [];
-    var right_face = [];
-    var left_face = [];
-    var front_face = [];
-    var back_face = [];
-    var vertical_middle_RL = [];
-    var vertical_middle_FB = [];
-    var horizontal_middle = [];
+    var corners = [];
+    var sides = [];
+    var centers = [];
 
-    var corner_RDF = new corner(this.r, ["right", "down", "front"]);
-    var corner_RDB = new corner(this.r, ["right", "down", "back"]);
-    var corner_RUF = new corner(this.r, ["right", "up", "front"]);
-    var corner_RUB = new corner(this.r, ["right", "up", "back"]);
-    var corner_LDF = new corner(this.r, ["left", "down", "front"]);
-    var corner_LDB = new corner(this.r, ["left", "down", "back"]);
-    var corner_LUF = new corner(this.r, ["left", "up", "front"]);
-    var corner_LUB = new corner(this.r, ["left", "up", "back"]);
+    var faceToRotate = "";
+    var rotationAngle = 0;
+    var rotationDirection = 1;
 
-    var side_RU = new side(this.r, ["right", "up"]);
-    var side_RD = new side(this.r, ["right", "down"]);
-    var side_RF = new side(this.r, ["right", "front"]);
-    var side_RB = new side(this.r, ["right", "back"]);
-    var side_LD = new side(this.r, ["left", "down"]);
-    var side_LU = new side(this.r, ["left", "up"]);
-    var side_LF = new side(this.r, ["left", "front"]);
-    var side_LB = new side(this.r, ["left", "back"]);
-    var side_DF = new side(this.r, ["down", "front"]);
-    var side_DB = new side(this.r, ["down", "back"]);
-    var side_UF = new side(this.r, ["up", "front"]);
-    var side_UB = new side(this.r, ["up", "back"]);
+    var move_cube = "";
+    var cube_angle = 0;
 
-    var center_R = new center(this.r, "right");     
-    var center_L = new center(this.r, "left");
-    var center_U = new center(this.r, "up");
-    var center_D = new center(this.r, "down");
-    var center_F = new center(this.r, "front");
-    var center_B = new center(this.r, "back");
 
-    //array_corner.push(corner_RDF, corner_RDB, corner_RUF, corner_RUB, corner_LDF, corner_LDB, corner_LUF, corner_LUB);
-    right_face.push( corner_RUF, 
-                corner_RUB, 
-                corner_RDB, 
-                corner_RDF,
-                side_RU,
-                side_RB,
-                side_RD,
-                side_RF,
-                center_R);
-    left_face.push( corner_LUF, 
-        corner_LDF, 
-        corner_LDB, 
-        corner_LUB,
-        side_LU,
-        side_LF,
-        side_LD,
-        side_LB,
-        center_L);
-    up_face.push( corner_RUF, 
-        corner_LUF, 
-        corner_LUB, 
-        corner_RUB,
-        side_RU,
-        side_UF,
-        side_LU,
-        side_UB,
-        center_U);
-    down_face.push( corner_RDF, 
-        corner_RDB, 
-        corner_LDB, 
-        corner_LDF,
-        side_RD,
-        side_DB,
-        side_LD,
-        side_DF,
-        center_D);
-    front_face.push( corner_RDF, 
-            corner_LDF, 
-            corner_LUF, 
-            corner_RUF,
-            side_UF,
-            side_RF,
-            side_DF,
-            side_LF,
-            center_F);
-    back_face.push( corner_RDB, 
-                corner_RUB, 
-                corner_LUB, 
-                corner_LDB,
-                side_UB,
-                side_LB,
-                side_DB,
-                side_RB,
-                center_B);
-    vertical_middle_RL.push(side_RU, side_LU, side_LD, side_RD, center_R, center_U, center_L, center_D);
-    vertical_middle_FB.push(side_UF, side_UB, side_DB, side_DF, center_F, center_U, center_B, center_D);
-    horizontal_middle.push(side_RF, side_RB, side_LB, side_LF, center_F, center_R, center_B, center_L);
-    
-    var display_face = function(face){
-        for(i=0; i<face.length; i++){
-            face[i].display();
+    // var up_face = [];
+    // var down_face = [];
+    // var right_face = [];
+    // var left_face = [];
+    // var front_face = [];
+    // var back_face = [];
+    // var vertical_middle_RL = [];
+    // var vertical_middle_FB = [];
+    // var horizontal_middle = [];
+
+    corners.push( new corner(dimension, ["right", "down", "front"]));
+    corners.push( new corner(dimension, ["right", "down", "back"]));
+    corners.push( new corner(dimension, ["right", "up", "front"]));
+    corners.push( new corner(dimension, ["right", "up", "back"]));
+    corners.push( new corner(dimension, ["left", "down", "front"]));
+    corners.push( new corner(dimension, ["left", "down", "back"]));
+    corners.push( new corner(dimension, ["left", "up", "front"]));
+    corners.push( new corner(dimension, ["left", "up", "back"]));
+
+    sides.push( new side(dimension, ["right", "up"]) );
+    sides.push( new side(dimension, ["right", "down"]) );
+    sides.push( new side(dimension, ["right", "front"]) );
+    sides.push( new side(dimension, ["right", "back"]) );
+    sides.push( new side(dimension, ["left", "down"]) );
+    sides.push( new side(dimension, ["left", "up"]) );
+    sides.push( new side(dimension, ["left", "front"]) );
+    sides.push( new side(dimension, ["left", "back"]) );
+    sides.push( new side(dimension, ["down", "front"]) );
+    sides.push( new side(dimension, ["down", "back"]) );
+    sides.push( new side(dimension, ["up", "front"]) );
+    sides.push( new side(dimension, ["up", "back"]) );
+
+    centers.push( new center(dimension, "right") );     
+    centers.push( new center(dimension, "left") );
+    centers.push( new center(dimension, "up") );
+    centers.push( new center(dimension, "down") );
+    centers.push( new center(dimension, "front") );
+    centers.push( new center(dimension, "back") );
+
+
+    this.rotate = function(face, direction){
+        if(faceToRotate === "" && move_cube === "")
+        {
+            faceToRotate = face;
+            rotationAngle = 0;
+            rotationDirection = direction;
         }
     }
-                        
 
-    this.display = function(faceToRotate, angle){
+    this.display = function(){
+        if (faceToRotate != "" )
+        {
+          angle += 0.18;
+          if(angle > PI/2)
+          {
+            executeRotation(faceToRotate, direction)
+            rotationAngle = 0;
+            faceToRotate = "";
+            //direction = 1;
+          }
+        }
+        
+        if(move_cube != ""){
+            cube_angle += 0.18;
+            if(cube_angle > PI/2 )
+            {
+              move(move_cube);
+              cube_angle = 0;
+              move_cube = "";
+            }
+            if(move_cube === "up"){
+              rotateX(cube_angle);
+            }
+            if(move_cube === "down"){
+              rotateX(-cube_angle);
+            }
+            if(move_cube === "right"){
+              rotateY(cube_angle);
+            }
+            if(move_cube === "left"){
+              rotateY(-cube_angle);
+            }
+          }
+        
+        
+        for (i=0; i<8; i++)
+        {
+
+        }
+
         switch(faceToRotate)
         {
             case "right":
