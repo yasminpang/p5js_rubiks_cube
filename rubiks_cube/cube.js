@@ -13,6 +13,15 @@ cube = function (dimension)
     var move_cube = "";
     var cube_angle = 0;
 
+    var nextPosition = {
+        right : ["up", "back", "down", "front"],
+        left  : ["up", "front", "down", "back"],
+        up    : ["front", "left", "back", "right"],
+        down  : ["front", "right", "back", "left"],
+        front : ["up", "right", "down", "left"],
+        back  : ["up", "left", "down", "right"]
+    }
+
 
 
     corners.push( new corner(dimension, ["right", "down", "front"]));
@@ -52,6 +61,121 @@ cube = function (dimension)
             faceToRotate = face;
             rotationAngle = 0;
             rotationDirection = direction;
+
+            //Set corners next color
+            for (i=0; i<8; i++)
+            {
+                //If the corner is in the face to rotate
+                if(corners[i].position[face])
+                {
+                    //Find the next corner in the specified face rotation
+                    // and set the next colors of this corner
+                    var nextCorner = findNextCorner(corners[i], face, direction);
+                    console.log(nextCorner.position);
+                    for (p in corners[i].position)
+                    {
+                        if(p)
+                        {
+                            if(p === face)
+                            {
+                                nextCorner.nextColor[p] = corners[i].color[p];
+                            }
+                            else
+                            {
+                                nextCorner.nextColor[findNextPosition(p, face, direction)] = corners[i].color[p];
+                            }
+                        }
+                    }
+
+                }
+            }
+                
+        }
+    }
+
+    findNextCorner = function(corner, face, direction)
+    {
+        //return;
+        var arrayNextCornerPosition = [
+            findNextPosition(corner.position.right, face, direction),
+            findNextPosition(corner.position.left, face, direction),
+            findNextPosition(corner.position.up, face, direction),
+            findNextPosition(corner.position.down, face, direction),
+            findNextPosition(corner.position.front, face, direction),
+            findNextPosition(corner.position.back, face, direction),
+        ];
+        var nextCornerPosition = {        
+            right : null,
+            left : null,
+            up : null,
+            down : null,
+            front : null,
+            back : null
+        };
+
+        for (i=0; i<6; i++)
+        {
+            if(arrayNextCornerPosition[i]){
+                nextCornerPosition[arrayNextCornerPosition[i]] = arrayNextCornerPosition[i]; 
+            }
+        }
+
+        console.log(nextCornerPosition);
+        console.log(corners[0].position);
+       //return;
+
+        for (i=0; i<8 ; i++)
+        {
+            if( corners[i].position.right === nextCornerPosition.right &&
+                corners[i].position.left === nextCornerPosition.left && 
+                corners[i].position.up === nextCornerPosition.up &&
+                corners[i].position.down === nextCornerPosition.down &&
+                corners[i].position.front === nextCornerPosition.front &&
+                corners[i].position.back === nextCornerPosition.back )
+            {
+                return corners[i];
+            }
+        }
+    }
+
+    findNextPosition = function(p, face, direction)
+    {
+        if (!p)
+        {
+            return null;
+        }
+
+        if( p === face)
+        {
+            return p;
+        }
+
+        for(i=0; i<4; i++ )
+        {
+            if(nextPosition[face][i] === p)
+            {
+                if( (i + direction) > 3)
+                {
+                    return nextPosition[face][0];
+                }
+                else if ( (i + direction) < 0 )
+                {
+                    return nextPosition[face][3];
+                }
+                else
+                {
+                    return nextPosition[face][i+direction];
+                }
+            }
+        }
+    }
+
+    this.move = function(direction)
+    {
+        if(faceToRotate === "" && move_cube === "")
+        {
+            move_cube = direction;
+            cube_angle = 0;
         }
     }
 
@@ -61,7 +185,7 @@ cube = function (dimension)
             rotationAngle += 0.18;
           if(rotationAngle > PI/2)
           {
-            executeRotation(faceToRotate, rotationAngle)
+            executeFaceRotation();
             rotationAngle = 0;
             faceToRotate = "";
             //direction = 1;
@@ -72,7 +196,7 @@ cube = function (dimension)
             cube_angle += 0.18;
             if(cube_angle > PI/2 )
             {
-              move(move_cube);
+              executeCubeMove();
               cube_angle = 0;
               move_cube = "";
             }
@@ -133,58 +257,35 @@ cube = function (dimension)
         }
     }
 
-    function swap_color(array_to_swap, direction)
+    executeFaceRotation = function(face, direction)
     {
-        var temp;
-        if(direction === 1)
-        {
-            temp = array_to_swap[0].color;
-            for(i=0; i<3; i++){
-                array_to_swap[i].color = array_to_swap[i+1].color;
-            }
-            array_to_swap[3].color = temp;
-        }
-        else
-        {
-            temp = array_to_swap[3].color;
-            for(i=3; i>0; i--){
-                array_to_swap[i].color = array_to_swap[i-1].color;
-            }
-            array_to_swap[0].color = temp;
-
-        }
-    }
-    
-    executeRotation = function(faceToRotate, direction)
-    {
-        //console.log(faceToRotate + " | " + clockwise);
-        //var temp;
+        //Execute corners rotation
     }
 
-    this.move = function(direction)
+    executeCubeMove = function()
     {
-        console.log(direction);
-        switch (direction)
+        //console.log(direction);
+        switch (move_cube)
         {
             case "up":
-                this.executeRotation("right", 1);
-                this.executeRotation("left", -1);
-                this.executeRotation("v_middle_FB", 1);
+                executeFaceRotation("right", 1);
+                executeFaceRotation("left", -1);
+                executeFaceRotation("v_middle_FB", 1);
                 break;
             case "down":
-                this.executeRotation("right", -1);
-                this.executeRotation("left", 1);
-                this.executeRotation("v_middle_FB", -1);
+                executeFaceRotation("right", -1);
+                executeFaceRotation("left", 1);
+                executeFaceRotation("v_middle_FB", -1);
                 break;
             case "right":
-                this.executeRotation("up", -1);
-                this.executeRotation("down", 1);
-                this.executeRotation("h_middle_RL", -1);
+                executeFaceRotation("up", -1);
+                executeFaceRotation("down", 1);
+                executeFaceRotation("h_middle_RL", -1);
                 break;            
             case "left":
-                this.executeRotation("up", 1);
-                this.executeRotation("down", -1);
-                this.executeRotation("h_middle_RL", 1);
+                executeFaceRotation("up", 1);
+                executeFaceRotation("down", -1);
+                executeFaceRotation("h_middle_RL", 1);
                 break;            
         }
     }

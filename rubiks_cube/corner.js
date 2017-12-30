@@ -1,12 +1,12 @@
 corner = function(dimension, pos)
 {
     this.position = {
-        right : false,
-        left : false,
-        up : false,
-        down : false,
-        front : false,
-        back : false
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
     };
 
     this.color = {        
@@ -17,6 +17,15 @@ corner = function(dimension, pos)
         front : null,
         back : null
     };
+
+    this.nextColor = {
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    }
 
     this.face = {
         right : null,
@@ -36,10 +45,10 @@ corner = function(dimension, pos)
         back : 0
     }
 
+    //Setup positions and colors of faces
     var arrayLength = pos.length;
     for (var i = 0; i < arrayLength; i++) {
-        //alert(myStringArray[i]);
-        this.position[pos[i]] = true;
+        this.position[pos[i]] = pos[i]; //test
         this.face[pos[i]] = new face(dimension, pos[i]);
         this.color[pos[i]] = pos[i];
         this.translate[pos[i]] = dimension;
@@ -50,10 +59,17 @@ corner = function(dimension, pos)
     var translateZ = this.translate.front - this.translate.back;
 
 
+    //display the corner
     this.display = function()
     {
         push();
         translate(translateX, translateY, translateZ);
+        
+        //draw black box
+        fill(40, 40, 40);
+        box(dimension - 3, dimension - 3, dimension - 3);
+
+        //draw faces of the corner 
         for (var key in this.face) {
             // skip loop if the property is from prototype
             if (!this.face.hasOwnProperty(key)) continue;
