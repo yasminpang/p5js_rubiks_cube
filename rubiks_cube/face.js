@@ -26,7 +26,7 @@ face = function(dimension, pos)
 
         fill(color.red, color.green, color.blue);
         translate(0, 0, dimension / 2)
-        plane(dimension - 3, dimension - 3);
+        plane(dimension - 5, dimension - 5);
         pop();
     }
 }

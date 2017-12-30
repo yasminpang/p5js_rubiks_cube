@@ -62,6 +62,7 @@ cube = function (dimension)
             rotationAngle = 0;
             rotationDirection = direction;
 
+            var i=0;
             //Set corners next color
             for (i=0; i<8; i++)
             {
@@ -71,20 +72,21 @@ cube = function (dimension)
                     //Find the next corner in the specified face rotation
                     // and set the next colors of this corner
                     var nextCorner = findNextCorner(corners[i], face, direction);
-                    console.log(nextCorner.position);
                     for (p in corners[i].position)
                     {
-                        if(p)
+                        var pos = corners[i].position[p];
+                        if(pos)
                         {
-                            if(p === face)
+                            if(pos === face)
                             {
-                                nextCorner.nextColor[p] = corners[i].color[p];
+                               nextCorner.nextColor[pos] = corners[i].color[pos];
                             }
                             else
                             {
-                                nextCorner.nextColor[findNextPosition(p, face, direction)] = corners[i].color[p];
+                                nextCorner.nextColor[findNextPosition(pos, face, direction)] = corners[i].color[pos];
                             }
                         }
+                        
                     }
 
                 }
@@ -119,10 +121,6 @@ cube = function (dimension)
                 nextCornerPosition[arrayNextCornerPosition[i]] = arrayNextCornerPosition[i]; 
             }
         }
-
-        console.log(nextCornerPosition);
-        console.log(corners[0].position);
-       //return;
 
         for (i=0; i<8 ; i++)
         {
@@ -257,14 +255,25 @@ cube = function (dimension)
         }
     }
 
-    executeFaceRotation = function(face, direction)
+    executeFaceRotation = function()
     {
         //Execute corners rotation
+        for(i=0; i<8; i++)
+        {
+            for (key in corners[i].color)
+            {
+                if(corners[i].nextColor[key])
+                {
+                    //console.log(corners[i].nextColor);
+                    corners[i].color[key] = corners[i].nextColor[key];
+                }
+            }
+        }
     }
 
     executeCubeMove = function()
     {
-        //console.log(direction);
+        
         switch (move_cube)
         {
             case "up":
