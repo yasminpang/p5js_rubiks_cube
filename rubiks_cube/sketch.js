@@ -2,7 +2,7 @@ var myCube;
 
 function setup() {
   // put setup code here
-  createCanvas(600, 400, WEBGL);
+  createCanvas(640, 480, WEBGL);
   myCube = new cube(60);
 }
 

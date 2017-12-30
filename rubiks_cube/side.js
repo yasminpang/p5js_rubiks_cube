@@ -1,6 +1,49 @@
 side = function(dimension, pos)
 {
-    //this.pos = pos;
+    this.position = {
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    };
+
+    this.color = {        
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    };
+
+    this.nextColor = {
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    }
+
+    this.face = {
+        right : null,
+        left : null,
+        up : null,
+        down : null,
+        front : null,
+        back : null
+    };
+
+    this.translate = {
+        right : 0,
+        left : 0,
+        up : 0,
+        down : 0,
+        front : 0,
+        back : 0
+    }
 
     var translateX = 0;
     var translateY = 0;
