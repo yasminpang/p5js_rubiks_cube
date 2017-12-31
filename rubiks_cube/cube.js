@@ -1,7 +1,9 @@
+"use strict";
+let cube;
 cube = function (dimension)
 {
     var corners = [];
-    var sides = [];
+    var edges = [];
     var centers = [];
 
     var faceToRotate = "";
@@ -22,35 +24,35 @@ cube = function (dimension)
 
 
 
-    corners.push( new corner(dimension, ["right", "down", "front"]));
-    corners.push( new corner(dimension, ["right", "down", "back"]));
-    corners.push( new corner(dimension, ["right", "up", "front"]));
-    corners.push( new corner(dimension, ["right", "up", "back"]));
-    corners.push( new corner(dimension, ["left", "down", "front"]));
-    corners.push( new corner(dimension, ["left", "down", "back"]));
-    corners.push( new corner(dimension, ["left", "up", "front"]));
-    corners.push( new corner(dimension, ["left", "up", "back"]));
+    corners.push( new Cubie(dimension, ["right", "down", "front"]));
+    corners.push( new Cubie(dimension, ["right", "down", "back"]));
+    corners.push( new Cubie(dimension, ["right", "up", "front"]));
+    corners.push( new Cubie(dimension, ["right", "up", "back"]));
+    corners.push( new Cubie(dimension, ["left", "down", "front"]));
+    corners.push( new Cubie(dimension, ["left", "down", "back"]));
+    corners.push( new Cubie(dimension, ["left", "up", "front"]));
+    corners.push( new Cubie(dimension, ["left", "up", "back"]));
 
     
-    sides.push( new corner(dimension, ["right", "up"]) );
-    sides.push( new corner(dimension, ["right", "down"]) );
-    sides.push( new corner(dimension, ["right", "front"]) );
-    sides.push( new corner(dimension, ["right", "back"]) );
-    sides.push( new corner(dimension, ["left", "down"]) );
-    sides.push( new corner(dimension, ["left", "up"]) );
-    sides.push( new corner(dimension, ["left", "front"]) );
-    sides.push( new corner(dimension, ["left", "back"]) );
-    sides.push( new corner(dimension, ["down", "front"]) );
-    sides.push( new corner(dimension, ["down", "back"]) );
-    sides.push( new corner(dimension, ["up", "front"]) );
-    sides.push( new corner(dimension, ["up", "back"]) );
+    edges.push( new Cubie(dimension, ["right", "up"]) );
+    edges.push( new Cubie(dimension, ["right", "down"]) );
+    edges.push( new Cubie(dimension, ["right", "front"]) );
+    edges.push( new Cubie(dimension, ["right", "back"]) );
+    edges.push( new Cubie(dimension, ["left", "down"]) );
+    edges.push( new Cubie(dimension, ["left", "up"]) );
+    edges.push( new Cubie(dimension, ["left", "front"]) );
+    edges.push( new Cubie(dimension, ["left", "back"]) );
+    edges.push( new Cubie(dimension, ["down", "front"]) );
+    edges.push( new Cubie(dimension, ["down", "back"]) );
+    edges.push( new Cubie(dimension, ["up", "front"]) );
+    edges.push( new Cubie(dimension, ["up", "back"]) );
     
-    centers.push( new corner(dimension, ["right"]) );     
-    centers.push( new corner(dimension, ["left"]) );
-    centers.push( new corner(dimension, ["up"]) );
-    centers.push( new corner(dimension, ["down"]) );
-    centers.push( new corner(dimension, ["front"]) );
-    centers.push( new corner(dimension, ["back"]) );
+    centers.push( new Cubie(dimension, ["right"]) );     
+    centers.push( new Cubie(dimension, ["left"]) );
+    centers.push( new Cubie(dimension, ["up"]) );
+    centers.push( new Cubie(dimension, ["down"]) );
+    centers.push( new Cubie(dimension, ["front"]) );
+    centers.push( new Cubie(dimension, ["back"]) );
  
     this.move = function(direction)
     {
@@ -65,29 +67,23 @@ cube = function (dimension)
                     setNextColor("right", 1);
                     setNextColor("left", -1);
                     setMiddleNextColor(["right", "left"], 1);
-                    //executeFaceRotation("v_middle_FB", 1);
                     break;
                 case "down":
                     setNextColor("right", -1);
                     setNextColor("left", 1);
                     setMiddleNextColor(["right", "left"], -1);
-                    //setNextColor("v_middle_FB", -1);
                     break;
                 case "right":
                     setNextColor("up", -1);
                     setNextColor("down", 1);
                     setMiddleNextColor(["down", "up"], 1);
-                    //setNextColor("h_middle_RL", -1);
                     break;            
                 case "left":
                     setNextColor("up", 1);
                     setNextColor("down", -1);
                     setMiddleNextColor(["down", "up"], -1);
-                    //setNextColor("h_middle_RL", 1);
                     break;            
             }
-            //executeFaceRotation();
-                
         }
     }
 
@@ -127,7 +123,7 @@ cube = function (dimension)
           }
         
         //display corners
-        for (i=0; i<8; i++)
+        for (let i=0; i<8; i++)
         {
             if(corners[i].position[faceToRotate])
             {
@@ -142,24 +138,24 @@ cube = function (dimension)
             }
         }
 
-        //display sides
-        for (i=0; i<12; i++)
+        //display edges
+        for (let i=0; i<12; i++)
         {
-            if(sides[i].position[faceToRotate])
+            if(edges[i].position[faceToRotate])
             {
                 push();
                 rotateFaceAxe();
-                sides[i].display();
+                edges[i].display();
                 pop();
             }
             else
             {
-                sides[i].display();
+                edges[i].display();
             }
         }
 
         //display centers
-        for(j=0; j<6; j++){
+        for(let j=0; j<6; j++){
             if(centers[j].position[faceToRotate]){
                 push();
                 rotateFaceAxe();
@@ -187,24 +183,24 @@ cube = function (dimension)
     function setMiddleNextColor(middle, direction){
         let i = 0;
         for(i=0; i<12; i++){
-            if(!sides[i].position[middle[0]] && !sides[i].position[middle[1]])
+            if(!edges[i].position[middle[0]] && !edges[i].position[middle[1]])
             {
                 //Find the next side in the specified face rotation
-                // and set the next colors of this corner
+                // and set the next colors of this Cubie
                 var face = middle[0];
-                var nextSide = findNextSide(sides[i], face, direction);
-                for (p in sides[i].position)
+                var nextSide = findNextSide(edges[i], face, direction);
+                for (let p in edges[i].position)
                 {
-                    var pos = sides[i].position[p];
+                    var pos = edges[i].position[p];
                     if(pos)
                     {
                         if(pos === face)
                         {
-                           nextSide.nextColor[pos] = sides[i].color[pos];
+                           nextSide.nextColor[pos] = edges[i].color[pos];
                         }
                         else
                         {
-                            nextSide.nextColor[findNextPosition(pos, face, direction)] = sides[i].color[pos];
+                            nextSide.nextColor[findNextPosition(pos, face, direction)] = edges[i].color[pos];
                         }
                     }
                 }
@@ -216,7 +212,7 @@ cube = function (dimension)
             if(!centers[i].position[middle[0]] && !centers[i].position[middle[1]]){
                 var face = middle[0];
                 var nextCenter = findNextCenter(centers[i], face, direction);
-                for (p in centers[i].position)
+                for (let p in centers[i].position)
                 {
                     var pos = centers[i].position[p];
                     if(pos)
@@ -241,13 +237,13 @@ cube = function (dimension)
         //Set corners next color
         for (i=0; i<8; i++)
         {
-            //If the corner is in the face to rotate
+            //If the Cubie is in the face to rotate
             if(corners[i].position[face])
             {
-                //Find the next corner in the specified face rotation
-                // and set the next colors of this corner
+                //Find the next Cubie in the specified face rotation
+                // and set the next colors of this Cubie
                 var nextCorner = findNextCorner(corners[i], face, direction);
-                for (p in corners[i].position)
+                for (let p in corners[i].position)
                 {
                     var pos = corners[i].position[p];
                     if(pos)
@@ -267,26 +263,26 @@ cube = function (dimension)
             }
         }
 
-        //set sides next color
+        //set edges next color
         for(i=0; i<12; i++){
             //If the side is in the face to rotate
-            if(sides[i].position[face])
+            if(edges[i].position[face])
             {
                 //Find the next side in the specified face rotation
-                // and set the next colors of this corner
-                var nextSide = findNextSide(sides[i], face, direction);
-                for (p in sides[i].position)
+                // and set the next colors of this Cubie
+                var nextSide = findNextSide(edges[i], face, direction);
+                for (let p in edges[i].position)
                 {
-                    var pos = sides[i].position[p];
+                    var pos = edges[i].position[p];
                     if(pos)
                     {
                         if(pos === face)
                         {
-                           nextSide.nextColor[pos] = sides[i].color[pos];
+                           nextSide.nextColor[pos] = edges[i].color[pos];
                         }
                         else
                         {
-                            nextSide.nextColor[findNextPosition(pos, face, direction)] = sides[i].color[pos];
+                            nextSide.nextColor[findNextPosition(pos, face, direction)] = edges[i].color[pos];
                         }
                     }
                 }
@@ -294,16 +290,16 @@ cube = function (dimension)
         }
     }
 
-    function findNextCorner(corner, face, direction)
+    function findNextCorner(Cubie, face, direction)
     {
         //return;
         var arrayNextCornerPosition = [
-            findNextPosition(corner.position.right, face, direction),
-            findNextPosition(corner.position.left, face, direction),
-            findNextPosition(corner.position.up, face, direction),
-            findNextPosition(corner.position.down, face, direction),
-            findNextPosition(corner.position.front, face, direction),
-            findNextPosition(corner.position.back, face, direction),
+            findNextPosition(Cubie.position.right, face, direction),
+            findNextPosition(Cubie.position.left, face, direction),
+            findNextPosition(Cubie.position.up, face, direction),
+            findNextPosition(Cubie.position.down, face, direction),
+            findNextPosition(Cubie.position.front, face, direction),
+            findNextPosition(Cubie.position.back, face, direction),
         ];
         var nextCornerPosition = {        
             right : null,
@@ -314,14 +310,14 @@ cube = function (dimension)
             back : null
         };
 
-        for (i=0; i<6; i++)
+        for (let i=0; i<6; i++)
         {
             if(arrayNextCornerPosition[i]){
                 nextCornerPosition[arrayNextCornerPosition[i]] = arrayNextCornerPosition[i]; 
             }
         }
 
-        for (i=0; i<8 ; i++)
+        for (let i=0; i<8 ; i++)
         {
             if( corners[i].position.right === nextCornerPosition.right &&
                 corners[i].position.left === nextCornerPosition.left && 
@@ -353,14 +349,14 @@ cube = function (dimension)
             back : null
         };
 
-        for (i=0; i<6; i++)
+        for (let i=0; i<6; i++)
         {
             if(arrayNextCenterPosition[i]){
                 nextCenterPosition[arrayNextCenterPosition[i]] = arrayNextCenterPosition[i]; 
             }
         }
 
-        for (i=0; i<6 ; i++)
+        for (let i=0; i<6 ; i++)
         {
             if( centers[i].position.right === nextCenterPosition.right &&
                 centers[i].position.left === nextCenterPosition.left && 
@@ -393,23 +389,23 @@ cube = function (dimension)
             back : null
         };
 
-        for (i=0; i<6; i++)
+        for (let i=0; i<6; i++)
         {
             if(arrayNextSidePosition[i]){
                 nextSidePosition[arrayNextSidePosition[i]] = arrayNextSidePosition[i]; 
             }
         }
 
-        for (i=0; i<12 ; i++)
+        for (let i=0; i<12 ; i++)
         {
-            if( sides[i].position.right === nextSidePosition.right &&
-                sides[i].position.left === nextSidePosition.left && 
-                sides[i].position.up === nextSidePosition.up &&
-                sides[i].position.down === nextSidePosition.down &&
-                sides[i].position.front === nextSidePosition.front &&
-                sides[i].position.back === nextSidePosition.back )
+            if( edges[i].position.right === nextSidePosition.right &&
+                edges[i].position.left === nextSidePosition.left && 
+                edges[i].position.up === nextSidePosition.up &&
+                edges[i].position.down === nextSidePosition.down &&
+                edges[i].position.front === nextSidePosition.front &&
+                edges[i].position.back === nextSidePosition.back )
             {
-                return sides[i];
+                return edges[i];
             }
         }
 
@@ -427,7 +423,7 @@ cube = function (dimension)
             return p;
         }
 
-        for(i=0; i<4; i++ )
+        for(let i=0; i<4; i++ )
         {
             if(nextPosition[face][i] === p)
             {
@@ -475,7 +471,7 @@ cube = function (dimension)
     function swapColors()
     {
         //Swap corners color
-        for(i=0; i<8; i++)
+        for(let i=0; i<8; i++)
         {
             for (key in corners[i].color)
             {
@@ -485,19 +481,19 @@ cube = function (dimension)
                 }
             }
         }
-        //Swap sides color
-        for(i=0; i<12; i++)
+        //Swap edges color
+        for(let i=0; i<12; i++)
         {
-            for (key in sides[i].color)
+            for (key in edges[i].color)
             {
-                if(sides[i].nextColor[key])
+                if(edges[i].nextColor[key])
                 {
-                    sides[i].color[key] = sides[i].nextColor[key];
+                    edges[i].color[key] = edges[i].nextColor[key];
                 }
             }
         }
         //Swap centers color
-        for(i=0; i<6; i++)
+        for(let i=0; i<6; i++)
         {
             for (key in centers[i].color)
             {
