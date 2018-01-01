@@ -18,6 +18,7 @@ function draw() {
 }
 
 function keyPressed() {
+  //Cube rotation
   switch (keyCode)
   {
     case LEFT_ARROW :
@@ -37,6 +38,7 @@ function keyPressed() {
 
 function keyTyped()
 {
+  //Face rotation
   var direction;
   if(keyIsDown(SHIFT))
   {

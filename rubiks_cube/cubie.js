@@ -29,7 +29,7 @@ class Cubie
             back : null
         }
     
-        this.face = {
+        this.stickers = {
             right : null,
             left : null,
             up : null,
@@ -51,7 +51,7 @@ class Cubie
         let arrayLength = pos.length;
         for (let i = 0; i < arrayLength; i++) {
             this.position[pos[i]] = pos[i]; //test
-            this.face[pos[i]] = new Sticker(dimension, pos[i]);
+            this.stickers[pos[i]] = new Sticker(dimension, pos[i]);
             this.color[pos[i]] = pos[i];
             this.translate[pos[i]] = dimension;
         }
@@ -74,12 +74,12 @@ class Cubie
         box(this.dimension - 3, this.dimension - 3, this.dimension - 3);
 
         //draw faces of the corner 
-        for (var key in this.face) {
+        for (var key in this.stickers) {
             // skip loop if the property is from prototype
-            if (!this.face.hasOwnProperty(key)) continue;
+            if (!this.stickers.hasOwnProperty(key)) continue;
         
-            if(this.face[key]){
-                var obj = this.face[key];
+            if(this.stickers[key]){
+                var obj = this.stickers[key];
                 obj.display(colors[this.color[key]]);
             }
         }
