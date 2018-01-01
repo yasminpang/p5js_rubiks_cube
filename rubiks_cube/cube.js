@@ -1,292 +1,509 @@
+"use strict";
+let cube;
 cube = function (dimension)
 {
-    this.r = dimension;
+    var corners = [];
+    var edges = [];
+    var centers = [];
 
-    var up_face = [];
-    var down_face = [];
-    var right_face = [];
-    var left_face = [];
-    var front_face = [];
-    var back_face = [];
-    var vertical_middle_RL = [];
-    var vertical_middle_FB = [];
-    var horizontal_middle = [];
+    var faceToRotate = "";
+    var rotationAngle = 0;
+    var rotationDirection = 1;
 
-    var corner_RDF = new corner(this.r, ["right", "down", "front"]);
-    var corner_RDB = new corner(this.r, ["right", "down", "back"]);
-    var corner_RUF = new corner(this.r, ["right", "up", "front"]);
-    var corner_RUB = new corner(this.r, ["right", "up", "back"]);
-    var corner_LDF = new corner(this.r, ["left", "down", "front"]);
-    var corner_LDB = new corner(this.r, ["left", "down", "back"]);
-    var corner_LUF = new corner(this.r, ["left", "up", "front"]);
-    var corner_LUB = new corner(this.r, ["left", "up", "back"]);
+    var move_cube = "";
+    var cube_angle = 0;
 
-    var side_RU = new side(this.r, ["right", "up"]);
-    var side_RD = new side(this.r, ["right", "down"]);
-    var side_RF = new side(this.r, ["right", "front"]);
-    var side_RB = new side(this.r, ["right", "back"]);
-    var side_LD = new side(this.r, ["left", "down"]);
-    var side_LU = new side(this.r, ["left", "up"]);
-    var side_LF = new side(this.r, ["left", "front"]);
-    var side_LB = new side(this.r, ["left", "back"]);
-    var side_DF = new side(this.r, ["down", "front"]);
-    var side_DB = new side(this.r, ["down", "back"]);
-    var side_UF = new side(this.r, ["up", "front"]);
-    var side_UB = new side(this.r, ["up", "back"]);
+    var nextPosition = {
+        right : ["up", "back", "down", "front"],
+        left  : ["up", "front", "down", "back"],
+        up    : ["front", "left", "back", "right"],
+        down  : ["front", "right", "back", "left"],
+        front : ["up", "right", "down", "left"],
+        back  : ["up", "left", "down", "right"]
+    }
 
-    var center_R = new center(this.r, "right");     
-    var center_L = new center(this.r, "left");
-    var center_U = new center(this.r, "up");
-    var center_D = new center(this.r, "down");
-    var center_F = new center(this.r, "front");
-    var center_B = new center(this.r, "back");
 
-    //array_corner.push(corner_RDF, corner_RDB, corner_RUF, corner_RUB, corner_LDF, corner_LDB, corner_LUF, corner_LUB);
-    right_face.push( corner_RUF, 
-                corner_RUB, 
-                corner_RDB, 
-                corner_RDF,
-                side_RU,
-                side_RB,
-                side_RD,
-                side_RF,
-                center_R);
-    left_face.push( corner_LUF, 
-        corner_LDF, 
-        corner_LDB, 
-        corner_LUB,
-        side_LU,
-        side_LF,
-        side_LD,
-        side_LB,
-        center_L);
-    up_face.push( corner_RUF, 
-        corner_LUF, 
-        corner_LUB, 
-        corner_RUB,
-        side_RU,
-        side_UF,
-        side_LU,
-        side_UB,
-        center_U);
-    down_face.push( corner_RDF, 
-        corner_RDB, 
-        corner_LDB, 
-        corner_LDF,
-        side_RD,
-        side_DB,
-        side_LD,
-        side_DF,
-        center_D);
-    front_face.push( corner_RDF, 
-            corner_LDF, 
-            corner_LUF, 
-            corner_RUF,
-            side_UF,
-            side_RF,
-            side_DF,
-            side_LF,
-            center_F);
-    back_face.push( corner_RDB, 
-                corner_RUB, 
-                corner_LUB, 
-                corner_LDB,
-                side_UB,
-                side_LB,
-                side_DB,
-                side_RB,
-                center_B);
-    vertical_middle_RL.push(side_RU, side_LU, side_LD, side_RD, center_R, center_U, center_L, center_D);
-    vertical_middle_FB.push(side_UF, side_UB, side_DB, side_DF, center_F, center_U, center_B, center_D);
-    horizontal_middle.push(side_RF, side_RB, side_LB, side_LF, center_F, center_R, center_B, center_L);
+
+    corners.push( new Cubie(dimension, ["right", "down", "front"]));
+    corners.push( new Cubie(dimension, ["right", "down", "back"]));
+    corners.push( new Cubie(dimension, ["right", "up", "front"]));
+    corners.push( new Cubie(dimension, ["right", "up", "back"]));
+    corners.push( new Cubie(dimension, ["left", "down", "front"]));
+    corners.push( new Cubie(dimension, ["left", "down", "back"]));
+    corners.push( new Cubie(dimension, ["left", "up", "front"]));
+    corners.push( new Cubie(dimension, ["left", "up", "back"]));
+
     
-    var display_face = function(face){
-        for(i=0; i<face.length; i++){
-            face[i].display();
+    edges.push( new Cubie(dimension, ["right", "up"]) );
+    edges.push( new Cubie(dimension, ["right", "down"]) );
+    edges.push( new Cubie(dimension, ["right", "front"]) );
+    edges.push( new Cubie(dimension, ["right", "back"]) );
+    edges.push( new Cubie(dimension, ["left", "down"]) );
+    edges.push( new Cubie(dimension, ["left", "up"]) );
+    edges.push( new Cubie(dimension, ["left", "front"]) );
+    edges.push( new Cubie(dimension, ["left", "back"]) );
+    edges.push( new Cubie(dimension, ["down", "front"]) );
+    edges.push( new Cubie(dimension, ["down", "back"]) );
+    edges.push( new Cubie(dimension, ["up", "front"]) );
+    edges.push( new Cubie(dimension, ["up", "back"]) );
+    
+    centers.push( new Cubie(dimension, ["right"]) );     
+    centers.push( new Cubie(dimension, ["left"]) );
+    centers.push( new Cubie(dimension, ["up"]) );
+    centers.push( new Cubie(dimension, ["down"]) );
+    centers.push( new Cubie(dimension, ["front"]) );
+    centers.push( new Cubie(dimension, ["back"]) );
+ 
+    this.move = function(direction)
+    {
+        if(faceToRotate === "" && move_cube === "")
+        {
+            move_cube = direction;
+            cube_angle = 0;
+
+            switch (move_cube)
+            {
+                case "up":
+                    setNextColor("right", 1);
+                    setNextColor("left", -1);
+                    setMiddleNextColor(["right", "left"], 1);
+                    break;
+                case "down":
+                    setNextColor("right", -1);
+                    setNextColor("left", 1);
+                    setMiddleNextColor(["right", "left"], -1);
+                    break;
+                case "right":
+                    setNextColor("up", -1);
+                    setNextColor("down", 1);
+                    setMiddleNextColor(["down", "up"], 1);
+                    break;            
+                case "left":
+                    setNextColor("up", 1);
+                    setNextColor("down", -1);
+                    setMiddleNextColor(["down", "up"], -1);
+                    break;            
+            }
         }
     }
-                        
 
-    this.display = function(faceToRotate, angle){
+    this.display = function(){
+        if (faceToRotate != "" )
+        {
+            rotationAngle += 0.1;
+          if(rotationAngle > PI/2)
+          {
+            swapColors();
+            rotationAngle = 0;
+            faceToRotate = "";
+            //direction = 1;
+          }
+        }
+        
+        if(move_cube != ""){
+            cube_angle += 0.1;
+            if(cube_angle > PI/2 )
+            {
+                swapColors();
+                cube_angle = 0;
+                move_cube = "";
+            }
+            if(move_cube === "up"){
+              rotateX(cube_angle);
+            }
+            if(move_cube === "down"){
+              rotateX(-cube_angle);
+            }
+            if(move_cube === "right"){
+              rotateY(cube_angle);
+            }
+            if(move_cube === "left"){
+              rotateY(-cube_angle);
+            }
+          }
+        
+        //display corners
+        for (let i=0; i<8; i++)
+        {
+            if(corners[i].position[faceToRotate])
+            {
+                push();
+                rotateFaceAxe();
+                corners[i].display();
+                pop();
+            }
+            else
+            {
+                corners[i].display();
+            }
+        }
+
+        //display edges
+        for (let i=0; i<12; i++)
+        {
+            if(edges[i].position[faceToRotate])
+            {
+                push();
+                rotateFaceAxe();
+                edges[i].display();
+                pop();
+            }
+            else
+            {
+                edges[i].display();
+            }
+        }
+
+        //display centers
+        for(let j=0; j<6; j++){
+            if(centers[j].position[faceToRotate]){
+                push();
+                rotateFaceAxe();
+                centers[j].display();
+                pop();
+            }else{
+                centers[j].display();
+            }
+        }
+        
+    }
+
+    this.rotate = function(face, direction){
+        if(faceToRotate === "" && move_cube === "")
+        {
+            faceToRotate = face;
+            rotationAngle = 0;
+            rotationDirection = direction;
+
+            setNextColor(face, direction);
+                
+        }
+    }
+
+    function setMiddleNextColor(middle, direction){
+        let i = 0;
+        for(i=0; i<12; i++){
+            if(!edges[i].position[middle[0]] && !edges[i].position[middle[1]])
+            {
+                //Find the next side in the specified face rotation
+                // and set the next colors of this Cubie
+                var face = middle[0];
+                var nextSide = findNextSide(edges[i], face, direction);
+                for (let p in edges[i].position)
+                {
+                    var pos = edges[i].position[p];
+                    if(pos)
+                    {
+                        if(pos === face)
+                        {
+                           nextSide.nextColor[pos] = edges[i].color[pos];
+                        }
+                        else
+                        {
+                            nextSide.nextColor[findNextPosition(pos, face, direction)] = edges[i].color[pos];
+                        }
+                    }
+                }
+            }
+        }
+
+        //centers
+        for(i=0; i<6; i++){
+            if(!centers[i].position[middle[0]] && !centers[i].position[middle[1]]){
+                var face = middle[0];
+                var nextCenter = findNextCenter(centers[i], face, direction);
+                for (let p in centers[i].position)
+                {
+                    var pos = centers[i].position[p];
+                    if(pos)
+                    {
+                        if(pos === face)
+                        {
+                            nextCenter.nextColor[pos] = centers[i].color[pos];
+                        }
+                        else
+                        {
+                            nextCenter.nextColor[findNextPosition(pos, face, direction)] = centers[i].color[pos];
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+
+    function setNextColor(face, direction){
+        var i=0;
+        //Set corners next color
+        for (i=0; i<8; i++)
+        {
+            //If the Cubie is in the face to rotate
+            if(corners[i].position[face])
+            {
+                //Find the next Cubie in the specified face rotation
+                // and set the next colors of this Cubie
+                var nextCorner = findNextCorner(corners[i], face, direction);
+                for (let p in corners[i].position)
+                {
+                    var pos = corners[i].position[p];
+                    if(pos)
+                    {
+                        if(pos === face)
+                        {
+                           nextCorner.nextColor[pos] = corners[i].color[pos];
+                        }
+                        else
+                        {
+                            nextCorner.nextColor[findNextPosition(pos, face, direction)] = corners[i].color[pos];
+                        }
+                    }
+                    
+                }
+
+            }
+        }
+
+        //set edges next color
+        for(i=0; i<12; i++){
+            //If the side is in the face to rotate
+            if(edges[i].position[face])
+            {
+                //Find the next side in the specified face rotation
+                // and set the next colors of this Cubie
+                var nextSide = findNextSide(edges[i], face, direction);
+                for (let p in edges[i].position)
+                {
+                    var pos = edges[i].position[p];
+                    if(pos)
+                    {
+                        if(pos === face)
+                        {
+                           nextSide.nextColor[pos] = edges[i].color[pos];
+                        }
+                        else
+                        {
+                            nextSide.nextColor[findNextPosition(pos, face, direction)] = edges[i].color[pos];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function findNextCorner(Cubie, face, direction)
+    {
+        //return;
+        var arrayNextCornerPosition = [
+            findNextPosition(Cubie.position.right, face, direction),
+            findNextPosition(Cubie.position.left, face, direction),
+            findNextPosition(Cubie.position.up, face, direction),
+            findNextPosition(Cubie.position.down, face, direction),
+            findNextPosition(Cubie.position.front, face, direction),
+            findNextPosition(Cubie.position.back, face, direction),
+        ];
+        var nextCornerPosition = {        
+            right : null,
+            left : null,
+            up : null,
+            down : null,
+            front : null,
+            back : null
+        };
+
+        for (let i=0; i<6; i++)
+        {
+            if(arrayNextCornerPosition[i]){
+                nextCornerPosition[arrayNextCornerPosition[i]] = arrayNextCornerPosition[i]; 
+            }
+        }
+
+        for (let i=0; i<8 ; i++)
+        {
+            if( corners[i].position.right === nextCornerPosition.right &&
+                corners[i].position.left === nextCornerPosition.left && 
+                corners[i].position.up === nextCornerPosition.up &&
+                corners[i].position.down === nextCornerPosition.down &&
+                corners[i].position.front === nextCornerPosition.front &&
+                corners[i].position.back === nextCornerPosition.back )
+            {
+                return corners[i];
+            }
+        }
+    }
+
+    function findNextCenter(center, face, direction){
+        var arrayNextCenterPosition = [
+            findNextPosition(center.position.right, face, direction),
+            findNextPosition(center.position.left, face, direction),
+            findNextPosition(center.position.up, face, direction),
+            findNextPosition(center.position.down, face, direction),
+            findNextPosition(center.position.front, face, direction),
+            findNextPosition(center.position.back, face, direction),
+        ];
+        var nextCenterPosition = {        
+            right : null,
+            left : null,
+            up : null,
+            down : null,
+            front : null,
+            back : null
+        };
+
+        for (let i=0; i<6; i++)
+        {
+            if(arrayNextCenterPosition[i]){
+                nextCenterPosition[arrayNextCenterPosition[i]] = arrayNextCenterPosition[i]; 
+            }
+        }
+
+        for (let i=0; i<6 ; i++)
+        {
+            if( centers[i].position.right === nextCenterPosition.right &&
+                centers[i].position.left === nextCenterPosition.left && 
+                centers[i].position.up === nextCenterPosition.up &&
+                centers[i].position.down === nextCenterPosition.down &&
+                centers[i].position.front === nextCenterPosition.front &&
+                centers[i].position.back === nextCenterPosition.back )
+            {
+                return centers[i];
+            }
+        }
+        
+    }
+
+    function findNextSide(side, face, direction){
+        var arrayNextSidePosition = [
+            findNextPosition(side.position.right, face, direction),
+            findNextPosition(side.position.left, face, direction),
+            findNextPosition(side.position.up, face, direction),
+            findNextPosition(side.position.down, face, direction),
+            findNextPosition(side.position.front, face, direction),
+            findNextPosition(side.position.back, face, direction),
+        ];
+        var nextSidePosition = {        
+            right : null,
+            left : null,
+            up : null,
+            down : null,
+            front : null,
+            back : null
+        };
+
+        for (let i=0; i<6; i++)
+        {
+            if(arrayNextSidePosition[i]){
+                nextSidePosition[arrayNextSidePosition[i]] = arrayNextSidePosition[i]; 
+            }
+        }
+
+        for (let i=0; i<12 ; i++)
+        {
+            if( edges[i].position.right === nextSidePosition.right &&
+                edges[i].position.left === nextSidePosition.left && 
+                edges[i].position.up === nextSidePosition.up &&
+                edges[i].position.down === nextSidePosition.down &&
+                edges[i].position.front === nextSidePosition.front &&
+                edges[i].position.back === nextSidePosition.back )
+            {
+                return edges[i];
+            }
+        }
+
+    }
+
+    function findNextPosition(p, face, direction)
+    {
+        if (!p)
+        {
+            return null;
+        }
+
+        if( p === face)
+        {
+            return p;
+        }
+
+        for(let i=0; i<4; i++ )
+        {
+            if(nextPosition[face][i] === p)
+            {
+                if( (i + direction) > 3)
+                {
+                    return nextPosition[face][0];
+                }
+                else if ( (i + direction) < 0 )
+                {
+                    return nextPosition[face][3];
+                }
+                else
+                {
+                    return nextPosition[face][i+direction];
+                }
+            }
+        }
+    }
+
+    function rotateFaceAxe()
+    {
         switch(faceToRotate)
         {
             case "right":
-                push();
-                rotateX(angle);
-                display_face(right_face)
-                pop();
-                display_face(left_face);
-                display_face(vertical_middle_FB);
+                rotateX(rotationAngle * rotationDirection);
                 break;
             case "left":
-                push();
-                rotateX(-angle);
-                display_face(left_face)
-                pop();
-                display_face(right_face);
-                display_face(vertical_middle_FB);
-                break;
-            case "down":
-                push();
-                rotateY(angle);
-                display_face(down_face)
-                pop();
-                display_face(up_face);
-                display_face(horizontal_middle);
+                rotateX(-rotationAngle * rotationDirection);
                 break;
             case "up":
-                push();
-                rotateY(-angle);
-                display_face(up_face)
-                pop();
-                display_face(down_face);
-                display_face(horizontal_middle);
+                rotateY(-rotationAngle * rotationDirection);
+                break;
+            case "down":
+                rotateY(rotationAngle * rotationDirection);
                 break;
             case "front":
-                push();
-                rotateZ(angle);
-                display_face(front_face)
-                pop();
-                display_face(back_face);
-                display_face(vertical_middle_RL);
+                rotateZ(rotationAngle * rotationDirection);
                 break;
             case "back":
-                push();
-                rotateZ(-angle);
-                display_face(back_face)
-                pop();
-                display_face(front_face);
-                display_face(vertical_middle_RL);
+                rotateZ(-rotationAngle * rotationDirection);
                 break;
-            default :
-                display_face(right_face);
-                display_face(left_face);
-                display_face(vertical_middle_FB);
         }
     }
 
-    function swap_color(array_to_swap, direction)
+    function swapColors()
     {
-        var temp;
-        if(direction === 1)
+        //Swap corners color
+        for(let i=0; i<8; i++)
         {
-            temp = array_to_swap[0].color;
-            for(i=0; i<3; i++){
-                array_to_swap[i].color = array_to_swap[i+1].color;
+            for (key in corners[i].color)
+            {
+                if(corners[i].nextColor[key])
+                {
+                    corners[i].color[key] = corners[i].nextColor[key];
+                }
             }
-            array_to_swap[3].color = temp;
         }
-        else
+        //Swap edges color
+        for(let i=0; i<12; i++)
         {
-            temp = array_to_swap[3].color;
-            for(i=3; i>0; i--){
-                array_to_swap[i].color = array_to_swap[i-1].color;
+            for (key in edges[i].color)
+            {
+                if(edges[i].nextColor[key])
+                {
+                    edges[i].color[key] = edges[i].nextColor[key];
+                }
             }
-            array_to_swap[0].color = temp;
-
         }
-    }
-    
-    this.executeRotation = function(faceToRotate, direction)
-    {
-        //console.log(faceToRotate + " | " + clockwise);
-        //var temp;
-        switch (faceToRotate)
+        //Swap centers color
+        for(let i=0; i<6; i++)
         {
-            case "right":
-                //Rotate corners color
-                swap_color([corner_RUB.face.up, corner_RUF.face.front, corner_RDF.face.down, corner_RDB.face.back], direction);
-                swap_color([corner_RUB.face.back, corner_RUF.face.up, corner_RDF.face.front, corner_RDB.face.down], direction);
-                swap_color([corner_RUB.face.right, corner_RUF.face.right, corner_RDF.face.right, corner_RDB.face.right], direction);
-
-                //rotate sides color
-                swap_color([side_RU.face.up, side_RF.face.front, side_RD.face.down, side_RB.face.back], direction);
-                swap_color([side_RU.face.right, side_RF.face.right, side_RD.face.right, side_RB.face.right], direction);
-                break;
-            case "left":
-                //Rotate corners color
-                swap_color([corner_LDF.face.front, corner_LUF.face.up, corner_LUB.face.back, corner_LDB.face.down], direction);
-                swap_color([corner_LDF.face.down, corner_LUF.face.front, corner_LUB.face.up, corner_LDB.face.back], direction);
-                swap_color([corner_LDF.face.left, corner_LUF.face.left, corner_LUB.face.left, corner_LDB.face.left], direction);
-
-                //rotate sides color
-                swap_color([side_LU.face.up, side_LB.face.back, side_LD.face.down, side_LF.face.front], direction);
-                swap_color([side_LU.face.left, side_LB.face.left, side_LD.face.left, side_LF.face.left], direction);
-                break;
-            case "up":
-                //corners
-                swap_color([corner_LUF.face.front, corner_RUF.face.right, corner_RUB.face.back, corner_LUB.face.left], direction);
-                swap_color([corner_LUF.face.left, corner_RUF.face.front, corner_RUB.face.right, corner_LUB.face.back], direction);
-                swap_color([corner_LUF.face.up, corner_RUF.face.up, corner_RUB.face.up, corner_LUB.face.up], direction);
-                //sides
-                swap_color([side_UF.face.front, side_RU.face.right, side_UB.face.back, side_LU.face.left], direction);
-                swap_color([side_UF.face.up, side_RU.face.up, side_UB.face.up, side_LU.face.up], direction);
-                break;
-            case "down":
-                //corners
-                swap_color([corner_RDF.face.front, corner_LDF.face.left, corner_LDB.face.back, corner_RDB.face.right], direction);
-                swap_color([corner_RDF.face.right, corner_LDF.face.front, corner_LDB.face.left, corner_RDB.face.back], direction);
-                swap_color([corner_RDF.face.down, corner_LDF.face.down, corner_LDB.face.down, corner_RDB.face.down], direction);
-                //sides
-                swap_color([side_DF.face.front, side_LD.face.left, side_DB.face.back, side_RD.face.right], direction);
-                swap_color([side_DF.face.down, side_LD.face.down, side_DB.face.down, side_RD.face.down], direction);
-                break;
-            case "front":
-                //corners
-                swap_color([corner_RUF.face.up, corner_LUF.face.left, corner_LDF.face.down, corner_RDF.face.right], direction);
-                swap_color([corner_RUF.face.right, corner_LUF.face.up, corner_LDF.face.left, corner_RDF.face.down], direction);
-                swap_color([corner_RUF.face.front, corner_LUF.face.front, corner_LDF.face.front, corner_RDF.face.front], direction);
-                //sides
-                swap_color([side_RF.face.right, side_UF.face.up, side_LF.face.left, side_DF.face.down], direction);
-                swap_color([side_RF.face.front, side_UF.face.front, side_LF.face.front, side_DF.face.front], direction);
-                break;
-            case "back":
-                //corners
-                swap_color([corner_RUB.face.right, corner_RDB.face.down, corner_LDB.face.left, corner_LUB.face.up], direction);
-                swap_color([corner_RUB.face.up, corner_RDB.face.right, corner_LDB.face.down, corner_LUB.face.left], direction);
-                swap_color([corner_RUB.face.back, corner_RDB.face.back, corner_LDB.face.back, corner_LUB.face.back], direction);
-                //sides
-                swap_color([side_UB.face.up, side_RB.face.right, side_DB.face.down, side_LB.face.left], direction);
-                swap_color([side_UB.face.back, side_RB.face.back, side_DB.face.back, side_LB.face.back], direction);
-                break;
-            case "v_middle_FB":
-                swap_color([center_U, center_F, center_D, center_B], direction);
-                swap_color([side_UF.face.up, side_DF.face.front, side_DB.face.down, side_UB.face.back], direction);
-                swap_color([side_UF.face.front, side_DF.face.down, side_DB.face.back, side_UB.face.up], direction);
-                break;
-            case "h_middle_RL":
-                swap_color([center_F, center_R, center_B, center_L], direction);
-                swap_color([side_RF.face.right, side_RB.face.back, side_LB.face.left, side_LF.face.front], direction);
-                swap_color([side_RF.face.front, side_RB.face.right, side_LB.face.back, side_LF.face.left], direction);
-                break;
+            for (key in centers[i].color)
+            {
+                if(centers[i].nextColor[key])
+                {
+                    centers[i].color[key] = centers[i].nextColor[key];
+                }
+            }
         }
+
     }
 
-    this.move = function(direction)
-    {
-        console.log(direction);
-        switch (direction)
-        {
-            case "up":
-                this.executeRotation("right", 1);
-                this.executeRotation("left", -1);
-                this.executeRotation("v_middle_FB", 1);
-                break;
-            case "down":
-                this.executeRotation("right", -1);
-                this.executeRotation("left", 1);
-                this.executeRotation("v_middle_FB", -1);
-                break;
-            case "right":
-                this.executeRotation("up", -1);
-                this.executeRotation("down", 1);
-                this.executeRotation("h_middle_RL", -1);
-                break;            
-            case "left":
-                this.executeRotation("up", 1);
-                this.executeRotation("down", -1);
-                this.executeRotation("h_middle_RL", 1);
-                break;            
-        }
-    }
 }
